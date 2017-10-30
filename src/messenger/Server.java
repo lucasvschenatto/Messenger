@@ -6,13 +6,20 @@ import java.net.Socket;
 
 public class Server {
 
-	public static void main(String[] args) throws IOException {
-		ServerSocket s = new ServerSocket(45678);
+	private int port;
+
+	public Server(int port) {
+		this.port = port;
+	}
+
+	public void serve() throws IOException {
+		@SuppressWarnings("resource")
+		ServerSocket s = new ServerSocket(port);
+		int i = 1;
 		while(true){
 			Socket socket = s.accept();
-			new ClientConnection(socket).run();
+			new Thread(new Connection(socket), "Connection" + i++).start();
 		}
-		
 	}
 
 }
