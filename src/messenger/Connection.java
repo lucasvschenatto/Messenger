@@ -20,6 +20,7 @@ public class Connection implements Runnable {
 		try {
 			this.in = new BufferedReader(new InputStreamReader(socket.getInputStream(), "UTF-8"));
 			this.out = new DataOutputStream(socket.getOutputStream());
+			System.out.println("Connection stablished to host: " + socket.getInetAddress().getHostAddress());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -35,7 +36,10 @@ public class Connection implements Runnable {
 	private void processMessage(){
 		try {
 			String message = in.readLine();
-			outputs.forEach(output -> sendMessageTo(message, output));
+			if(message != null)
+				outputs.forEach(output -> sendMessageTo(message, output));
+			else
+				socket.close();
 			
 		} catch (IOException e) {
 			try {
@@ -52,7 +56,6 @@ public class Connection implements Runnable {
 		try {
 			output.writeBytes(message + "\n");
 		} catch (IOException e) {
-//			e.printStackTrace();
 		}
 	}
 
