@@ -28,7 +28,8 @@ public class ClientSocketIn implements Runnable{
 	private void processMessage(){
 		try {
 			String message = in.readLine();
-			System.out.println(message);
+			if(message != null)
+				System.out.println(message);
 		} catch (IOException e) {
 			System.exit(0);
 		}

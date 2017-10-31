@@ -1,6 +1,7 @@
 package messenger;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -17,7 +18,12 @@ public class Client {
 	}
 
 	public void connect() throws UnknownHostException, IOException {
-		socket = new Socket(host,port);
+		do{
+			try{
+				socket = new Socket(host,port);				
+			}catch(ConnectException e){}
+		} while(socket == null);
+		System.out.printf("Connection stablished to %s:%d",host,port);
 		
 		new Thread(new ClientSocketIn(socket), "Client IN").start();
 		new Thread(new ClientSocketOut(socket), "Client OUT").start();
